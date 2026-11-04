@@ -65,7 +65,7 @@ export function Dashboard({ id, title, onNavigate }: { id: string; title: string
           <button className="primary" onClick={() => { begin(); setPicking(true); }}><Icon name="plus" /> Add cards</button>
         </div>
       )}
-      <Grid className={`grid ${edit ? "editing" : ""}`} layout={rgl} cols={12} rowHeight={124} margin={[12, 12]}
+      <Grid className={`grid ${edit ? "editing" : ""}`} layout={rgl} cols={12} rowHeight={140} margin={[12, 12]}
         containerPadding={[0, 0]} isDraggable={edit} isResizable={false} compactType="vertical"
         draggableHandle=".drag-handle" onLayoutChange={onLayout}>
         {cards.map((c) => {

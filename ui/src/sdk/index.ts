@@ -8,7 +8,7 @@ import type { AppSettings, Entry, Size } from "../core/types";
 
 export { useEffect, useMemo, useRef, useState, useCallback, Fragment } from "react";
 export { Icon } from "./icons";
-export { Stat, Sparkline, Segmented, Badge, Empty } from "./components";
+export { Stat, Sparkline, Segmented, Badge, Empty, CardTitle, Fact, RangeBar, Bars } from "./components";
 export type { Size, Location, AppSettings } from "../core/types";
 
 // ---------------------------------------------------------------- tool registration

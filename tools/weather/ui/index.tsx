@@ -1,6 +1,6 @@
 import {
-  defineCard, defineTool, fmtDow, fmtIsoTime, fmtNum, fmtTemp, Icon, saveToolSettings, useApp, useProvider,
-  useToolSettings, type CardProps,
+  Bars, CardTitle, defineCard, defineTool, Fact, fmtDow, fmtIsoTime, fmtNum, fmtTemp, Icon, RangeBar,
+  saveToolSettings, useApp, useProvider, useToolSettings, type CardProps,
 } from "@sdk";
 
 // Mirrors WeatherState in tools/weather/provider.py
@@ -15,71 +15,127 @@ interface W {
   units: { temp: string; wind: string };
 }
 
-const icon = (name: string, isDay = true) => (!isDay && name === "sun" ? "moon" : !isDay && name === "cloud-sun" ? "cloud" : name);
-const popTone = (p: number) => (p >= 40 ? "tone-accent" : p >= 15 ? "" : "muted");
+const dayIcon = (name: string, isDay = true) => (!isDay && name === "sun" ? "moon" : !isDay && name === "cloud-sun" ? "cloud" : name);
+/** Icon colour follows the condition: sun warm, moon pale, rain and storms blue, snow cool, cloud and fog grey. */
+const TONE: Record<string, string> = { sun: "wx-tone-sun", moon: "wx-tone-moon", "cloud-sun": "wx-tone-sun", "cloud-rain": "wx-tone-rain",
+  "cloud-storm": "wx-tone-rain", snowflake: "wx-tone-snow", cloud: "wx-tone-cloud", mist: "wx-tone-cloud" };
+function WxIcon({ name, isDay = true, size }: { name: string; isDay?: boolean; size: number }) {
+  const n = dayIcon(name, isDay);
+  return <Icon name={n} size={size} className={`wx-icon ${TONE[n] ?? "wx-tone-cloud"}`} />;
+}
+const placeName = (w: W) => (w.place.is_me ? "My location" : `${w.place.name}${w.place.region ? `, ${w.place.region}` : ""}`);
+const UV_SHORT: Record<string, string> = { Low: "Low", Moderate: "Moderate", High: "High", "Very high": "Very high", Extreme: "Extreme" };
 
 function outlookText(o: W["outlook"]): string {
   let s = o.label;
   if (o.kind && o.start) s += o.end ? ` ${fmtIsoTime(o.start)}–${fmtIsoTime(o.end)}` : ` from ${fmtIsoTime(o.start)}`;
-  if (o.kind) s += ` (${fmtNum(o.max_pop)}%)`;
-  const extra = [o.freezing && "freezing", o.gust_warning && `gusts ${fmtNum(o.gust_warning)}`].filter(Boolean);
-  return extra.length ? `${s} · ${extra.join(" · ")}` : s;
+  if (o.kind) s += `, up to ${fmtNum(o.max_pop)}%`;
+  return s;
+}
+
+function Outlook({ o }: { o: W["outlook"] }) {
+  const warn = [o.freezing && "Freezing temperatures", o.gust_warning && `Gusts to ${fmtNum(o.gust_warning)}`].filter(Boolean) as string[];
+  return (
+    <div className={`wx-outlook ${o.kind ? "is-wet" : ""}`}>
+      <Icon name={o.kind ? "umbrella" : "sun"} size={16} />
+      <span>{outlookText(o)}</span>
+      {warn.map((w) => <span key={w} className="wx-warn"><Icon name="alert" size={14} /> {w}</span>)}
+    </div>
+  );
 }
 
 function Now({ size }: CardProps) {
   const w = useProvider<W>("weather");
   const n = w.now, t = w.today;
+  if (size === "S") {
+    return (
+      <div className="wx-now wx-S">
+        <CardTitle icon="map-pin">{placeName(w)}</CardTitle>
+        <div className="wx-hero">
+          <WxIcon name={n.icon} isDay={n.is_day} size={34} />
+          <div className="wx-temp">{fmtTemp(n.temp)}</div>
+          <div className="wx-cond"><div className="wx-cond-name">{n.condition}</div><div className="muted">H {fmtTemp(t.high)}  L {fmtTemp(t.low)}</div></div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={`wx-now wx-${size}`}>
-      <div className="card-title">{w.place.is_me ? "My location" : w.place.name}{w.place.region ? `, ${w.place.region}` : ""}</div>
-      <div className="wx-main">
-        <div className="wx-temp">{fmtTemp(n.temp)}</div>
-        <div className="wx-cond">
-          <div className="wx-cond-line"><Icon name={icon(n.icon, n.is_day)} size={18} /> {n.condition}</div>
-          <div className="muted">Feels {fmtTemp(n.feels)} · H {fmtTemp(t.high)} · L {fmtTemp(t.low)}</div>
-        </div>
-        {size !== "S" && (
-          <div className="wx-facts">
-            <div><Icon name="sunrise" size={15} /> {fmtIsoTime(t.sunrise)} <Icon name="sunset" size={15} /> {fmtIsoTime(t.sunset)}</div>
-            <div title="UV now / today's peak">UV {t.uv_now_level} / {t.uv_max_level}</div>
-            <div title={`${w.night.phase}, ${w.night.moon_percent}% lit, ${w.night.cloud_percent}% cloud cover tonight`}>
-              <Icon name="moon" size={15} /> Night light {fmtNum(w.night.percent)}%</div>
+      <CardTitle icon="map-pin">{placeName(w)}</CardTitle>
+      <div className="wx-body">
+        <div className="wx-hero">
+          <WxIcon name={n.icon} isDay={n.is_day} size={44} />
+          <div className="wx-temp">{fmtTemp(n.temp)}</div>
+          <div className="wx-cond">
+            <div className="wx-cond-name">{n.condition}</div>
+            <div className="muted">Feels like {fmtTemp(n.feels)}</div>
+            <div className="wx-hilo"><span><Icon name="arrow-up" size={13} />{fmtTemp(t.high)}</span><span><Icon name="arrow-down" size={13} />{fmtTemp(t.low)}</span></div>
           </div>
-        )}
+        </div>
+        <div className="facts">
+          <Fact icon="sunrise" label="Sunrise" value={fmtIsoTime(t.sunrise)} />
+          <Fact icon="sunset" label="Sunset" value={fmtIsoTime(t.sunset)} />
+          <Fact icon="uv" label="UV now" value={UV_SHORT[t.uv_now_level] ?? t.uv_now_level} title={`Today's peak: ${t.uv_max_level}`} />
+          <Fact icon="moon" label="Night light" value={`${fmtNum(w.night.percent)}%`}
+            title={`${w.night.phase}, ${w.night.moon_percent}% lit, ${w.night.cloud_percent}% cloud cover tonight`} />
+          {size === "L" && <Fact icon="wind" label="Wind" value={`${fmtNum(n.wind)} ${w.units.wind}`} title={`Gusts ${fmtNum(n.gust)} ${w.units.wind}`} />}
+          {size === "L" && <Fact icon="droplet" label="Humidity" value={`${fmtNum(n.humidity)}%`} />}
+        </div>
       </div>
-      {size !== "S" && <div className={`wx-outlook ${w.outlook.kind ? "tone-accent" : "muted"}`}>{outlookText(w.outlook)}</div>}
-      {size === "L" && <HourStrip hours={w.hours.slice(0, 12)} />}
+      <Outlook o={w.outlook} />
+      {size === "L" && <RainStrip hours={w.hours.slice(0, 12)} />}
     </div>
   );
 }
 
-function HourStrip({ hours }: { hours: W["hours"] }) {
+function RainStrip({ hours, height = 34 }: { hours: W["hours"]; height?: number }) {
   return (
-    <div className="wx-hours">
-      {hours.map((h, i) => (
-        <div key={h.time} className="wx-hour">
-          <div className="muted">{i === 0 ? "Now" : fmtIsoTime(h.time, true)}</div>
-          <div>{fmtTemp(h.temp)}</div>
-          <div className={popTone(h.pop)}>{fmtNum(h.pop)}%</div>
-        </div>
-      ))}
+    <div className="wx-strip">
+      <div className="wx-strip-head"><span>Next {hours.length} hours</span><span className="muted">temperature and chance of rain</span></div>
+      <Bars values={hours.map((h) => h.pop)} height={height}
+        top={hours.map((h) => fmtTemp(h.temp))}
+        labels={hours.map((h, i) => (
+          <span key={h.time} title={`${fmtNum(h.pop)}% chance of rain`}>
+            <span className={`bar-pop ${h.pop >= 40 ? "is-wet" : ""}`}>{h.pop >= 10 ? `${fmtNum(h.pop)}%` : "\u00a0"}</span>
+            <span>{i === 0 ? "Now" : fmtIsoTime(h.time, true)}</span>
+          </span>
+        ))} />
     </div>
   );
 }
 
 function Week({ size }: CardProps) {
   const w = useProvider<W>("weather");
+  const min = Math.min(...w.days.map((d) => d.low)), max = Math.max(...w.days.map((d) => d.high));
+  if (size === "M") {
+    return (
+      <div className="wx-week wx-M">
+        <CardTitle icon="calendar" detail="High, low, chance of rain">7 days</CardTitle>
+        <div className="wx-days">
+          {w.days.map((d, i) => (
+            <div key={d.date} className="wx-day" title={d.condition}>
+              <div className="wx-day-name">{i === 0 ? "Today" : fmtDow(d.date)}</div>
+              <WxIcon name={d.icon} size={20} />
+              <div className="wx-temps"><span className="wx-hi">{fmtTemp(d.high)}</span><span className="wx-lo">{fmtTemp(d.low)}</span></div>
+              <div className={`wx-pop ${d.pop >= 40 ? "is-wet" : ""}`}>{fmtNum(d.pop)}%</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
   return (
-    <div className={`wx-week wx-${size}`}>
-      <div className="card-title">7 days <span className="muted">high · low · rain</span></div>
-      <div className="wx-days">
+    <div className="wx-week wx-L">
+      <CardTitle icon="calendar" detail={`${fmtTemp(min)} to ${fmtTemp(max)} this week`}>7 days</CardTitle>
+      <div className="wx-rows">
         {w.days.map((d, i) => (
-          <div key={d.date} className="wx-day" title={d.condition}>
-            <div className="muted">{i === 0 ? "Today" : fmtDow(d.date)}</div>
-            {size === "L" && <Icon name={d.icon} size={18} />}
-            <div className="wx-hi">{fmtTemp(d.high)}</div>
-            <div className="muted">{fmtTemp(d.low)}</div>
-            <div className={popTone(d.pop)}>{fmtNum(d.pop)}%</div>
+          <div key={d.date} className="wx-row" title={d.condition}>
+            <span className="wx-day-name">{i === 0 ? "Today" : fmtDow(d.date)}</span>
+            <WxIcon name={d.icon} size={18} />
+            <span className={`wx-pop ${d.pop >= 40 ? "is-wet" : ""}`}>{d.pop >= 10 ? <><Icon name="droplet" size={12} />{fmtNum(d.pop)}%</> : ""}</span>
+            <span className="wx-lo">{fmtTemp(d.low)}</span>
+            <RangeBar low={d.low} high={d.high} min={min} max={max} marker={i === 0 ? w.now.temp : undefined} />
+            <span className="wx-hi">{fmtTemp(d.high)}</span>
           </div>
         ))}
       </div>
@@ -106,21 +162,16 @@ function Page() {
           )}
         </div>
       </div>
-      {!w ? <div className="skeleton tall" /> : (<>
-        <section className="panel"><Now size="M" /></section>
-        <section className="panel">
-          <div className="card-title">Next 24 hours</div>
-          <table className="table compact wx-table">
-            <tbody>
-              <tr><th>Time</th>{w.hours.map((h, i) => <td key={h.time} className="muted">{i === 0 ? "Now" : fmtIsoTime(h.time, true)}</td>)}</tr>
-              <tr><th>Temp</th>{w.hours.map((h) => <td key={h.time}>{fmtTemp(h.temp)}</td>)}</tr>
-              <tr><th>Rain</th>{w.hours.map((h) => <td key={h.time} className={popTone(h.pop)}>{fmtNum(h.pop)}%</td>)}</tr>
-            </tbody>
-          </table>
-        </section>
-        <section className="panel"><Week size="L" /></section>
-        <div className="muted small">Wind {fmtNum(w.now.wind)} {w.units.wind}, gusts {fmtNum(w.now.gust)} · humidity {fmtNum(w.now.humidity)}% · data: Open-Meteo</div>
-      </>)}
+      {!w ? <div className="skeleton tall" /> : (
+        <div className="wx-page">
+          <section className="panel wx-page-now"><Now size="L" /></section>
+          <section className="panel wx-page-week"><Week size="L" /></section>
+          <section className="panel wx-page-day">
+            <RainStrip hours={w.hours} height={56} />
+          </section>
+          <p className="muted small">Forecast from Open-Meteo, updated every 15 minutes.</p>
+        </div>
+      )}
     </div>
   );
 }

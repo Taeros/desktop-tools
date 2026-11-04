@@ -6,7 +6,7 @@ import {
   IconCurrentLocation, IconDownload, IconUpload, IconAlertTriangle, IconShieldLock, IconInfoCircle, IconGripVertical,
   IconStar, IconBolt, IconCalendar, IconWorld, IconNotes, IconHeart, IconBriefcase, IconSchool, IconArrowUp,
   IconArrowDown, IconSunrise, IconSunset, IconUmbrella, IconWind, IconTemperature, IconPalette, IconKeyboard,
-  IconLayoutSidebar, IconTools, IconDatabase, IconActivity, IconDroplet,
+  IconLayoutSidebar, IconTools, IconDatabase, IconActivity, IconDroplet, IconUvIndex, IconTrendingUp, IconTrendingDown, IconSunMoon,
 } from "@tabler/icons-react";
 import type { Icon as TablerIcon } from "@tabler/icons-react";
 
@@ -22,7 +22,7 @@ export const ICONS: Record<string, TablerIcon> = {
   briefcase: IconBriefcase, school: IconSchool, "arrow-up": IconArrowUp, "arrow-down": IconArrowDown,
   sunrise: IconSunrise, sunset: IconSunset, umbrella: IconUmbrella, wind: IconWind, temperature: IconTemperature,
   palette: IconPalette, keyboard: IconKeyboard, sidebar: IconLayoutSidebar, tools: IconTools, database: IconDatabase,
-  activity: IconActivity, droplet: IconDroplet,
+  activity: IconActivity, droplet: IconDroplet, uv: IconUvIndex, "trend-up": IconTrendingUp, "trend-down": IconTrendingDown, "sun-moon": IconSunMoon,
 };
 
 /** Icons offered in the sidebar editor. */

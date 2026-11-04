@@ -37,6 +37,10 @@ from desktop_tools.sdk import Location, Provider, ToolError, ToolSettings
 log = logging.getLogger("desktop_tools.engine")
 
 
+# The v0.1 default Home dashboard; replaced by the new default if the user never changed it.
+V1_HOME = sorted([("clocks/world", "M"), ("markets/watchlist", "M"), ("weather/now", "M"), ("weather/week", "M")])
+
+
 class EngineError(Exception):
     """Raised for bad API requests (becomes HTTP 400)."""
 
@@ -236,7 +240,13 @@ class Engine:
             if tool.provider_cls:
                 self.tool_settings[tool.id] = self._load_tool_settings(tool)
         self._save_app()
-        self.layout = self._reconcile_layout(Layout.model_validate(read_json(self._layout_file) or {}))
+        raw_layout = read_json(self._layout_file) or {}
+        if int(raw_layout.get("schema_version", 1)) < 2:
+            home = (raw_layout.get("dashboards") or {}).get("home", {}).get("cards", [])
+            if sorted((c.get("card"), c.get("size")) for c in home) == V1_HOME:
+                raw_layout.get("dashboards", {}).pop("home", None)  # untouched v1 default -> new default
+        raw_layout["schema_version"] = 2
+        self.layout = self._reconcile_layout(Layout.model_validate(raw_layout))
         write_json(self._layout_file, self.layout.model_dump())
         for tool in self.tools.values():
             self._start_or_block(tool)
@@ -385,8 +395,8 @@ class Engine:
 
     @staticmethod
     def _default_home(available: set[str]) -> list[CardPlacement]:
-        wanted = [("weather/now", "M", 0, 0), ("clocks/world", "M", 6, 0),
-                  ("weather/week", "M", 0, 1), ("markets/watchlist", "M", 6, 1)]
+        wanted = [("weather/now", "L", 0, 0), ("clocks/world", "L", 6, 0),
+                  ("weather/week", "L", 0, 2), ("markets/watchlist", "L", 6, 2)]
         return [CardPlacement(i=uuid.uuid4().hex[:8], card=c, size=s, x=x, y=y)  # type: ignore[arg-type]
                 for c, s, x, y in wanted if c in available]
 

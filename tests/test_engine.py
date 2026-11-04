@@ -109,3 +109,16 @@ async def test_old_default_hotkey_is_migrated(tmp_path: Path):
     await e.stop()
     custom = json.loads((data / "settings" / "app.json").read_text())
     assert custom["schema_version"] == 2
+
+
+async def test_untouched_v1_home_gets_new_default(tmp_path: Path):
+    data = tmp_path / "data"
+    data.mkdir()
+    old = [{"i": str(n), "card": c, "size": "M", "x": 0, "y": n}
+           for n, c in enumerate(["weather/now", "clocks/world", "weather/week", "markets/watchlist"])]
+    v1 = {"schema_version": 1, "sidebar": [], "dashboards": {"home": {"cards": old}}}
+    (data / "layout.json").write_text(json.dumps(v1))
+    e = Engine(data, fake=True, tools_dir=TOOLS_DIR)
+    await e.start()
+    assert {c.size for c in e.layout.dashboards["home"].cards} == {"L"}
+    await e.stop()

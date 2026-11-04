@@ -123,7 +123,10 @@ class SidebarEntry(BaseModel):
     hidden: bool = False
 
 
+LAYOUT_VERSION = 2
+
+
 class Layout(BaseModel):
-    schema_version: int = 1
+    schema_version: int = LAYOUT_VERSION
     sidebar: list[SidebarEntry] = []
     dashboards: dict[str, Dashboard] = {}
