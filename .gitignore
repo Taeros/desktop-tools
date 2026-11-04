@@ -19,6 +19,7 @@ __pycache__/
 node_modules/
 ui/.vite/
 ui/test-results/
+ui/shots/
 ui/playwright-report/
 
 # os / editors

@@ -5,13 +5,39 @@
   "description": "Current conditions, 24-hour outlook and 7-day forecast from Open-Meteo.",
   "icon": "cloud",
   "category": "Information",
+  "order": 10,
   "page": true,
   "cards": [
-    { "id": "now", "name": "Weather now", "sizes": ["S", "M", "L"], "surfaces": ["control", "bar"] },
-    { "id": "week", "name": "7-day forecast", "sizes": ["M", "L"], "surfaces": ["control"] }
+    {
+      "id": "now",
+      "name": "Weather now",
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "surfaces": [
+        "control",
+        "bar"
+      ]
+    },
+    {
+      "id": "week",
+      "name": "7-day forecast",
+      "sizes": [
+        "M",
+        "L"
+      ],
+      "surfaces": [
+        "control"
+      ]
+    }
   ],
   "permissions": {
-    "network": ["api.open-meteo.com", "ipwho.is"],
+    "network": [
+      "api.open-meteo.com",
+      "ipwho.is"
+    ],
     "system": [],
     "secrets": []
   }

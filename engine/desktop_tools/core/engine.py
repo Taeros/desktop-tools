@@ -359,7 +359,7 @@ class Engine:
         ids = {e.id for e in entries}
         if "home" not in ids:
             entries.insert(0, SidebarEntry(id="home", title="Home", icon="home"))
-        for t in self.tools.values():
+        for t in sorted(self.tools.values(), key=lambda x: (x.manifest.order, x.manifest.name)):
             if t.manifest.page and f"tool:{t.id}" not in ids:
                 entries.append(SidebarEntry(id=f"tool:{t.id}", title=t.manifest.name, icon=t.manifest.icon))
         cards = {f"{t.id}/{c.id}" for t in self.tools.values() for c in t.manifest.cards}
@@ -371,7 +371,7 @@ class Engine:
     @staticmethod
     def _default_home(available: set[str]) -> list[CardPlacement]:
         wanted = [("weather/now", "M", 0, 0), ("clocks/world", "M", 6, 0),
-                  ("weather/week", "L", 0, 1), ("markets/watchlist", "M", 6, 1)]
+                  ("weather/week", "M", 0, 1), ("markets/watchlist", "M", 6, 1)]
         return [CardPlacement(i=uuid.uuid4().hex[:8], card=c, size=s, x=x, y=y)  # type: ignore[arg-type]
                 for c, s, x, y in wanted if c in available]
 

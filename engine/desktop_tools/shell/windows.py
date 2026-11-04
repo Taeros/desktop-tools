@@ -132,6 +132,7 @@ def run_shell(url: str, engine: Any, server: Any) -> None:
     import pystray  # noqa: PLC0415
     import webview  # noqa: PLC0415
 
+    webview.settings["ALLOW_DOWNLOADS"] = True  # settings export
     state = {"visible": True, "quitting": False}
     window = webview.create_window(APP_NAME, url, width=1200, height=780, min_size=(900, 600),
                                    background_color="#11141B", text_select=True)

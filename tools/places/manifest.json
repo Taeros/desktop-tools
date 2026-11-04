@@ -5,10 +5,14 @@
   "description": "Finds places by name and approximate current location for the shared Saved places list.",
   "icon": "map-pin",
   "category": "System",
+  "order": 90,
   "page": false,
   "cards": [],
   "permissions": {
-    "network": ["geocoding-api.open-meteo.com", "ipwho.is"],
+    "network": [
+      "geocoding-api.open-meteo.com",
+      "ipwho.is"
+    ],
     "system": [],
     "secrets": []
   }

@@ -5,12 +5,27 @@
   "description": "Watchlist with percent change over 1 day, 1 week, 1 month and 1 year (Yahoo Finance).",
   "icon": "chart-line",
   "category": "Information",
+  "order": 20,
   "page": true,
   "cards": [
-    { "id": "watchlist", "name": "Watchlist", "sizes": ["S", "M", "L"], "surfaces": ["control", "bar"] }
+    {
+      "id": "watchlist",
+      "name": "Watchlist",
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "surfaces": [
+        "control",
+        "bar"
+      ]
+    }
   ],
   "permissions": {
-    "network": ["query1.finance.yahoo.com"],
+    "network": [
+      "query1.finance.yahoo.com"
+    ],
     "system": [],
     "secrets": []
   }

@@ -26,8 +26,8 @@ Rainmeter bar.
 
 ## Layout
 
-* Dashboard grid: 12 columns, row height 80 px, gap 12 px.
-* Card sizes: **S** = 3×1, **M** = 6×1, **L** = 6×2, **XL** = 12×2 (columns × rows). Cards declare which they support.
+* Dashboard grid: 12 columns, row height 124 px, gap 12 px.
+* Card sizes: **S** = 3×1, **M** = 6×1, **L** = 6×2, **XL** = 12×2 (columns × rows; row = 124 px). Cards declare which they support.
 * Sidebar: 56 px wide, icons 20 px, tooltip with name, active page = accent tint.
 
 ## Units and formats (defaults, user-changeable)

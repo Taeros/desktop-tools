@@ -40,7 +40,7 @@ The UI never talks to Windows or the internet directly.
 | Windows data | pycaw/comtypes (audio), `winrt-*` packages (media session, radios), `netsh` (Wi-Fi), NetworkInterface (VPN) | Native APIs, no PowerShell helper |
 | Secrets | `keyring` → Windows Credential Manager (DPAPI) | Encrypted per-user, never on disk in plain text |
 | UI | React 18 + TypeScript + Vite; CSS variables design tokens; no UI framework dependency | Most widely known stack; typed contracts |
-| Layout editing | `react-grid-layout` (or equivalent) | Drag/resize dashboards |
+| Layout editing | `react-grid-layout` | Drag to move; sizes S/M/L/XL picked from a menu (no free resize, for consistency) |
 | Tests | pytest (engine), Vitest (UI), Playwright (screenshots in fake mode) | Run anywhere without Windows |
 | Quality | ruff, mypy, eslint, prettier, gitleaks (pre-commit + CI) | Consistency, secret scanning |
 
@@ -144,7 +144,8 @@ Cards get loading / stale / error / empty states for free from the card host; th
 1. Import only from `desktop_tools.sdk` (engine) and `@sdk` (UI). Never from another tool or the core internals.
 2. All network access goes through `ctx.http`; all OS access through `ctx.adapters`.
 3. Every provider ships `fake.py`; every card renders against it.
-4. State and settings are Pydantic models; TS types are generated from them (`scripts/codegen`).
+4. State and settings are Pydantic models. The UI mirrors State as a TypeScript interface at the top of
+   `ui/index.tsx` (generation from the Pydantic models is planned; keep the mirror in sync by hand until then).
 5. Settings changes happen through settings models (auto forms), never hand-built settings UIs unless unavoidable.
 
 ## 5. Core services

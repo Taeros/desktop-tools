@@ -5,9 +5,22 @@
   "description": "Local time and the time at your saved places.",
   "icon": "clock",
   "category": "Information",
+  "order": 30,
   "page": true,
   "cards": [
-    { "id": "world", "name": "World clock", "sizes": ["S", "M", "L"], "surfaces": ["control", "bar"] }
+    {
+      "id": "world",
+      "name": "World clock",
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "surfaces": [
+        "control",
+        "bar"
+      ]
+    }
   ],
   "permissions": {
     "network": [],

@@ -96,6 +96,7 @@ class Manifest(BaseModel):
     description: str = ""
     icon: str = "box"
     category: str = "Tools"
+    order: int = 100  # default position in the sidebar (lower = higher up)
     page: bool = True
     cards: list[CardSpec] = []
     permissions: Permissions = Permissions()

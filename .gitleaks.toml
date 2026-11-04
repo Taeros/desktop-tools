@@ -1,0 +1,6 @@
+title = "Desktop Tools secret scanning"
+[extend]
+useDefault = true
+[allowlist]
+description = "Obvious test values"
+regexes = ['''test-token-not-a-secret''', '''screenshot-token''', '''TEST_KEY_123''']
