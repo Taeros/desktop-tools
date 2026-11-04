@@ -1,0 +1,28 @@
+# user data and secrets never belong in the repo
+.env
+.env.*
+*.key
+*.pem
+secrets/
+data/
+*.log
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ui
+node_modules/
+ui/.vite/
+ui/test-results/
+ui/playwright-report/
+
+# os / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
