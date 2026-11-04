@@ -10,7 +10,8 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from desktop_tools.sdk import Location
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
+DEFAULT_HOTKEY = "Ctrl+Alt+Shift+D"  # Ctrl+Alt+Space clashed with the Claude desktop app
 
 
 # ---------------------------------------------------------------- app-wide (universal) settings
@@ -30,7 +31,7 @@ class AppSettings(BaseModel):
     model_config = ConfigDict(extra="ignore")
     schema_version: int = SCHEMA_VERSION
     # General
-    hotkey: str = Field("Ctrl+Alt+Space", title="Summon hotkey", description="Shows or hides the control center")
+    hotkey: str = Field(DEFAULT_HOTKEY, title="Summon hotkey", description="Shows or hides the control center from anywhere")
     start_at_login: bool = Field(True, title="Start at login")
     start_page: str = Field("home", title="Start page")
     # Units and formats

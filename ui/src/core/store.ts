@@ -39,6 +39,7 @@ function onMessage(msg: any) {
     case "state": set({ state: { ...s.state, [msg.tool]: msg.entry } }); break;
     case "app": set({ app: msg.app }); break;
     case "layout": set({ layout: msg.layout }); break;
+    case "shell": if (s.boot) set({ boot: { ...s.boot, shell: msg.shell } }); break;
     case "tool_settings": {
       const t = s.tools[msg.tool];
       if (t) set({ tools: { ...s.tools, [msg.tool]: { ...t, settings: msg.settings } } });

@@ -169,6 +169,7 @@ input[type="color"] { width: 44px; height: 30px; padding: 2px; border: 1px solid
 .tag { display: inline-flex; align-items: center; gap: 4px; background: rgba(var(--accent-rgb), 0.14); color: var(--accent); padding: 3px 4px 3px 10px; border-radius: 20px; font-weight: 600; }
 .tag button { padding: 1px; background: none; border: none; color: inherit; }
 .tags input { width: 90px; }
+.hint { display: flex; align-items: center; gap: 6px; margin: 4px 0 8px; font-size: 0.92em; }
 .hotkey.recording { border-color: var(--accent); color: var(--accent); }
 .presets { display: flex; gap: 10px; padding: 14px 0 6px; flex-wrap: wrap; }
 .preset { flex-direction: column; gap: 6px; padding: 10px 14px; }

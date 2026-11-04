@@ -41,6 +41,7 @@ export interface Layout {
 export interface Bootstrap {
   version: string; fake: boolean; app: AppSettings; app_schema: JsonSchema; layout: Layout;
   tools: ToolInfo[]; state: Record<string, Entry>; data_dir: string;
+  shell: { hotkey?: "active" | "conflict" | "invalid"; hotkey_text?: string };
 }
 
 export interface JsonSchema {

@@ -54,6 +54,7 @@ export function SettingsPage({ initial, onNavigate }: { initial?: string; onNavi
                 if (v.hotkey !== app.hotkey) saveApp({ hotkey: v.hotkey });
                 if (v.start_at_login !== app.start_at_login) saveApp({ start_at_login: v.start_at_login });
               }} />
+            <HotkeyStatus />
             <StartPage />
           </>)}
           {tab === "units" && appForm(["units", "time_format", "date_style", "first_day"])}
@@ -73,6 +74,20 @@ export function SettingsPage({ initial, onNavigate }: { initial?: string; onNavi
         </div>
       </div>
     </div>
+  );
+}
+
+function HotkeyStatus() {
+  const shell = useStore((s) => s.boot?.shell);
+  const hotkey = useStore((s) => s.app?.hotkey);
+  if (!shell?.hotkey || shell.hotkey_text !== hotkey) {
+    return <p className="hint muted">The shortcut works while Desktop Tools is running in the Windows app (not in a browser).</p>;
+  }
+  if (shell.hotkey === "active") return <p className="hint tone-up"><Icon name="check" size={16} /> {hotkey} is active</p>;
+  return (
+    <p className="hint tone-warm"><Icon name="alert" size={16} />{" "}
+      {shell.hotkey === "conflict" ? `${hotkey} is already used by another app. Choose a different shortcut above.`
+        : `${hotkey} isn't a valid shortcut. Choose a different one above.`}</p>
   );
 }
 

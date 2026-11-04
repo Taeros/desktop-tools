@@ -97,3 +97,15 @@ async def test_new_tool_needs_approval(tmp_path: Path):
     await asyncio.sleep(0.2)
     assert e2.store.get("markets")["status"] == "ok"
     await e2.stop()
+
+
+async def test_old_default_hotkey_is_migrated(tmp_path: Path):
+    data = tmp_path / "data"
+    (data / "settings").mkdir(parents=True)
+    (data / "settings" / "app.json").write_text(json.dumps({"schema_version": 1, "hotkey": "Ctrl+Alt+Space"}))
+    e = Engine(data, fake=True, tools_dir=TOOLS_DIR)
+    await e.start()
+    assert e.app.hotkey == "Ctrl+Alt+Shift+D"
+    await e.stop()
+    custom = json.loads((data / "settings" / "app.json").read_text())
+    assert custom["schema_version"] == 2

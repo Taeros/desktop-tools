@@ -10,7 +10,7 @@ control center (and later a top bar, dock and launcher).
 ```
 uv sync && npm --prefix ui ci && npm --prefix ui run build
 uv run dt --fake --no-window      # any OS, sample data, prints a browser URL
-uv run dt                          # Windows: window, tray icon, Ctrl+Alt+Space
+uv run dt                          # Windows: window, tray icon, Ctrl+Alt+Shift+D
 ```
 
 Install on Windows (per-user, no admin): double-click `Install.cmd` (runs `scripts\install.ps1`)

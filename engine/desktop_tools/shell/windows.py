@@ -51,9 +51,10 @@ def parse_hotkey(text: str) -> tuple[int, int] | None:
 
 
 class HotkeyThread(threading.Thread):
-    def __init__(self, get_hotkey: Any, on_press: Any) -> None:
+    def __init__(self, get_hotkey: Any, on_press: Any, report: Any = None) -> None:
         super().__init__(daemon=True, name="hotkey")
         self.get_hotkey, self.on_press = get_hotkey, on_press
+        self.report = report or (lambda **_: None)
         self.thread_id = 0
         self.current = ""
 
@@ -64,11 +65,14 @@ class HotkeyThread(threading.Thread):
         parsed = parse_hotkey(self.current)
         if not parsed:
             log.warning("Hotkey '%s' is not valid", self.current)
+            self.report(hotkey="invalid", hotkey_text=self.current)
             return
         if not user32.RegisterHotKey(None, 1, parsed[0] | MOD_NOREPEAT, parsed[1]):
             log.warning("Hotkey '%s' is already used by another app", self.current)
+            self.report(hotkey="conflict", hotkey_text=self.current)
         else:
             log.info("Hotkey %s registered", self.current)
+            self.report(hotkey="active", hotkey_text=self.current)
 
     def run(self) -> None:
         user32 = ctypes.windll.user32  # type: ignore[attr-defined]
@@ -173,7 +177,7 @@ def run_shell(url: str, engine: Any, server: Any) -> None:
     tray = pystray.Icon("desktop-tools", _tray_image(), APP_NAME, menu)
     tray.run_detached()
 
-    hotkey = HotkeyThread(lambda: engine.app.hotkey, toggle)
+    hotkey = HotkeyThread(lambda: engine.app.hotkey, toggle, engine.set_shell_status)
     hotkey.start()
 
     def watch_settings() -> None:

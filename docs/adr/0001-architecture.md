@@ -19,7 +19,7 @@ Each entry: decision, alternatives considered, reason. New decisions get a new n
 | 11 | GitHub private repo `desktop-tools` as source of truth | Local folder only | History, handoff, CI |
 | 12 | Interpreter managed by `uv` (Python 3.12, per-user), not the system `python` | Use installed Python 3.11 | The PC's `python` on PATH resolves to a copy inside an old course folder; a uv-managed interpreter is isolated and reproducible |
 | 13 | App code in `%USERPROFILE%\DesktopTools` (visible, not synced), data in `%LOCALAPPDATA%\DesktopTools\data`; updates delivered from GitHub by the developer (bridge sync now, `git pull` later) | Install inside OneDrive | Keeps `.venv` and data out of OneDrive sync; git is not installed on the PC yet |
-| 14 | App name "Desktop Tools"; summon hotkey Ctrl+Alt+Space, changeable in the universal Settings page | — | Owner decision |
+| 14 | App name "Desktop Tools"; summon hotkey **Ctrl+Alt+Shift+D** (was Ctrl+Alt+Space, which the Claude desktop app already uses), changeable in Settings, which shows whether the shortcut is active or taken | — | Owner decision; changed 2026-11-03 after a conflict |
 | 15 | v1 tools: Home, Weather, Markets, Clocks, Settings; audio and network follow in Phase 1.5 | All five tools in v1 | Build a solid base before interactive system control |
 | 16 | One universal Settings page holds app-wide and cross-tool settings (units, time format, shared locations); tools read them, never duplicate them | Per-tool copies | Single source of truth, simplicity |
 

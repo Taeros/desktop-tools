@@ -103,7 +103,7 @@ or that several tools share. Tools read shared values and never duplicate them.
 
 | Group | Settings |
 |-------|----------|
-| General | Summon hotkey (default **Ctrl+Alt+Space**), start at login, open on start-up page |
+| General | Summon hotkey (default **Ctrl+Alt+Shift+D**), start at login, open on start-up page |
 | Units and formats | Metric / imperial (default metric), 24 / 12-hour time (default 24), date style, first day of week |
 | Locations | Saved places shared by Weather and Clocks; "my location" on/off |
 | Appearance | Theme (accent, light/dark, density, font scale, corner radius), presets |

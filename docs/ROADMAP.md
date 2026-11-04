@@ -14,7 +14,7 @@ Phases are ordered by the priorities in [CONCEPT.md](CONCEPT.md). Each phase end
 - Home dashboard; dashboard edit mode (add / move / resize / remove cards)
 - Universal Settings page (hotkey, units, time format, shared locations, appearance, tools, data, system health)
 - Sidebar editor; auto-generated per-tool settings forms; theme editor; import/export settings
-- Start at login; tray icon; summon hotkey (Ctrl+Alt+Space)
+- Start at login; tray icon; summon hotkey (Ctrl+Alt+Shift+D)
 
 ## Phase 1.5 — Interactive system tools
 - Audio and media (volume, output device, per-app volume, now playing)

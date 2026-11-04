@@ -29,7 +29,7 @@ try {
     # 3. Start (the app creates its own start-at-login shortcut if that setting is on)
     if (-not $NoStart) {
         Start-Process -FilePath (Join-Path $App '.venv\Scripts\pythonw.exe') -ArgumentList '-m', 'desktop_tools' -WorkingDirectory $App
-        Write-Host 'Started. Press Ctrl+Alt+Space to open it.'
+        Write-Host 'Started. Press Ctrl+Alt+Shift+D to open it.'
     }
 } finally {
     Stop-Transcript | Out-Null

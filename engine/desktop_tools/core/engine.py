@@ -17,7 +17,9 @@ from desktop_tools import __version__
 from desktop_tools.core import paths
 from desktop_tools.core.logs import memory as log_memory
 from desktop_tools.core.models import (
+    DEFAULT_HOTKEY,
     DEFAULT_LOCATIONS,
+    SCHEMA_VERSION,
     AppSettings,
     CardPlacement,
     Dashboard,
@@ -185,6 +187,15 @@ class Engine:
         self.layout = Layout()
         self.http_client: httpx.AsyncClient | None = None
         self._lock = asyncio.Lock()
+        self.loop: asyncio.AbstractEventLoop | None = None
+        # Reported by the Windows shell, e.g. {"hotkey": "active"|"conflict"|"invalid", "hotkey_text": "..."}
+        self.shell_status: dict[str, Any] = {}
+
+    def set_shell_status(self, **values: Any) -> None:
+        """Thread-safe: called from the shell's threads."""
+        self.shell_status.update(values)
+        if self.loop:
+            self.loop.call_soon_threadsafe(self.store.broadcast, {"type": "shell", "shell": dict(self.shell_status)})
 
     # ------------------------------------------------------------ files
     @property
@@ -200,6 +211,7 @@ class Engine:
 
     # ------------------------------------------------------------ lifecycle
     async def start(self) -> None:
+        self.loop = asyncio.get_running_loop()
         self.http_client = httpx.AsyncClient(timeout=httpx.Timeout(15.0), follow_redirects=False)
         raw = read_json(self._app_file)
         first_run = raw is None
@@ -210,6 +222,9 @@ class Engine:
             self.app = AppSettings()
         if first_run:
             self.app.locations = list(DEFAULT_LOCATIONS)
+        elif int((raw or {}).get("schema_version", 1)) < 2 and self.app.hotkey == "Ctrl+Alt+Space":
+            self.app.hotkey = DEFAULT_HOTKEY  # v1 default clashed with the Claude desktop app
+        self.app.schema_version = SCHEMA_VERSION
 
         for tool in discover(self.tools_dir):
             self.tools[tool.id] = tool
@@ -446,6 +461,7 @@ class Engine:
             "tools": tools,
             "state": self.store.snapshot(),
             "data_dir": str(self.data_dir),
+            "shell": dict(self.shell_status),
         }
 
     def health(self) -> dict[str, Any]:
