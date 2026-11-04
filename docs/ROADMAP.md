@@ -10,10 +10,15 @@ Phases are ordered by the priorities in [CONCEPT.md](CONCEPT.md). Each phase end
 - UI shell: control center with sidebar and empty pages; design tokens; card host with all states
 
 ## Phase 1 — Control center v1
-- Tools: Weather, Markets, Clocks, Audio and media, Network/VPN
+- Tools: Weather, Markets, Clocks
 - Home dashboard; dashboard edit mode (add / move / resize / remove cards)
-- Sidebar editor; auto-generated settings forms; theme editor; import/export settings
-- System health page; start at login; tray icon; summon hotkey
+- Universal Settings page (hotkey, units, time format, shared locations, appearance, tools, data, system health)
+- Sidebar editor; auto-generated per-tool settings forms; theme editor; import/export settings
+- Start at login; tray icon; summon hotkey (Ctrl+Alt+Space)
+
+## Phase 1.5 — Interactive system tools
+- Audio and media (volume, output device, per-app volume, now playing)
+- Network/VPN (Wi-Fi, Bluetooth, airplane mode, Proton VPN, IPs)
 - Retire Rainmeter
 
 ## Phase 2 — Top bar

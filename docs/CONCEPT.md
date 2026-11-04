@@ -1,6 +1,6 @@
 # Desktop Tools — Concept
 
-> Status: **Draft for approval**. Owner: Nicolas Lamps. Last updated: 2026-11-03.
+> Status: **Approved** (name, hotkey, v1 scope confirmed 2026-11-03). Owner: Nicolas Lamps. Last updated: 2026-11-03.
 > This document says *what* we are building and *why*. [ARCHITECTURE.md](ARCHITECTURE.md) says *how*.
 
 ## 1. Vision
@@ -79,25 +79,38 @@ Everything below is done in the UI and saved as data. Nothing requires editing f
 | Dashboards | Edit mode: add a card from a picker, drag to move, choose size S/M/L, remove | Multiple columns presets, per-page background |
 | Tool settings | Auto-generated forms from each tool's settings schema (units, locations, tickers …) | |
 | Look | Theme: accent color, light/dark, density, font scale, corner radius; presets | Theme import/export, wallpaper-derived palette |
-| Global | Units (metric default), 24-h time, language of dates, hotkeys, start at login | |
+| Global | Universal Settings page: units, time format, hotkey, start at login, shared locations | |
 | Data | Export / import all settings as one file; reset a tool; reset everything | |
 | No-code tools | — | "Quick links" (launch apps/URLs/files), "Custom number" card (value from a JSON URL), "Note" card |
 | Other surfaces | — | Same layout editor for top bar and dock |
 
-## 7. v1 scope (proposed)
+## 7. v1 scope (approved 2026-11-03)
 
-Tools carried over from the Rainmeter bar, rebuilt on the new architecture:
+A small, solid base first; interactive system-control tools come after the foundations are proven.
 
-1. **Weather**: now, outlook, 7 days, UV now/peak, sunrise/sunset, night light, locations (search, favorites, my location).
-2. **Markets**: watchlist with % change over 1D/1W/1M/1Y (VT by default).
-3. **Clocks**: local plus chosen saved locations.
-4. **Audio and media**: master volume, output device, per-app volume, now playing (Spotify / browser).
-5. **Network**: Wi-Fi (list and connect), Bluetooth, airplane mode, Proton VPN status and toggle, IPs, flush DNS.
-6. **Home** dashboard with all of the above as cards.
-7. **Settings**, plus **System health** (provider status, logs).
+1. **Home**: a dashboard page with cards from every installed tool.
+2. **Weather**: now, outlook, 7 days, UV now/peak, sunrise/sunset, night light, locations (search, favorites, my location).
+3. **Markets**: watchlist with % change over 1D/1W/1M/1Y (VT by default).
+4. **Clocks**: local time plus chosen saved locations (independent show/hide).
+5. **Settings**: the universal settings page (below), plus per-tool settings and system health.
 
-The user's additional tool ideas are evaluated after this document is approved; anything not in v1 lands in
-[ROADMAP.md](ROADMAP.md).
+Next, once the base is solid: Audio and media, Network/VPN, then further tool ideas (see [ROADMAP.md](ROADMAP.md)).
+
+### Universal settings
+
+One **Settings** page, always the last sidebar entry, for everything that belongs to the app rather than one tool,
+or that several tools share. Tools read shared values and never duplicate them.
+
+| Group | Settings |
+|-------|----------|
+| General | Summon hotkey (default **Ctrl+Alt+Space**), start at login, open on start-up page |
+| Units and formats | Metric / imperial (default metric), 24 / 12-hour time (default 24), date style, first day of week |
+| Locations | Saved places shared by Weather and Clocks; "my location" on/off |
+| Appearance | Theme (accent, light/dark, density, font scale, corner radius), presets |
+| Layout | Sidebar order/names/icons/visibility; reset layout |
+| Tools | Enable/disable, approve permissions, open each tool's own settings |
+| Data and privacy | Export / import settings, reset, open data folder, stored secrets (names only) |
+| System | Health of each provider, logs, version, check for updates |
 
 ## 8. Non-goals
 
