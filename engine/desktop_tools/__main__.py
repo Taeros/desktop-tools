@@ -61,8 +61,9 @@ class ServerThread(threading.Thread):
         super().__init__(daemon=True, name="server")
         self.engine, self.port = engine, port
         app = create_app(engine, token, port, paths.UI_DIST)
+        # log_config=None: use our redacting log setup instead of uvicorn's console formatter
         config = uvicorn.Config(app, host="127.0.0.1", port=port, log_level="warning", access_log=False,
-                                ws_max_size=1_000_000)
+                                ws_max_size=1_000_000, log_config=None)
         self.server = uvicorn.Server(config)
         self.ready = threading.Event()
 
@@ -80,7 +81,15 @@ class ServerThread(threading.Thread):
         self.server.should_exit = True
 
 
+def _ensure_std_streams() -> None:
+    """pythonw.exe (no console) sets sys.stdout/stderr to None; libraries that write or call isatty() then crash."""
+    for name in ("stdout", "stderr"):
+        if getattr(sys, name) is None:
+            setattr(sys, name, open(os.devnull, "w", encoding="utf-8"))  # noqa: SIM115
+
+
 def main(argv: list[str] | None = None) -> int:
+    _ensure_std_streams()
     ap = argparse.ArgumentParser(prog="dt", description="Desktop Tools")
     ap.add_argument("--fake", action="store_true", help="use recorded data for every tool")
     ap.add_argument("--no-window", action="store_true", help="run the server only")

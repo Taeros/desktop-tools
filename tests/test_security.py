@@ -55,6 +55,7 @@ async def test_http_allowlist(tmp_path):
 def test_log_redaction():
     assert "abc123secretvalue" not in redact("api_key=abc123secretvalue")
     assert "[redacted]" in redact("Authorization: Bearer abcdefghijklmnopqrstuvwxyz0123456789")
+    assert redact("Hotkey Ctrl+Alt+Shift+D registered") == "Hotkey Ctrl+Alt+Shift+D registered"
     rec = logging.LogRecord("x", logging.INFO, "f", 1, "token=%s", ("supersecret99",), None)
     RedactFilter().filter(rec)
     assert "supersecret99" not in rec.getMessage()

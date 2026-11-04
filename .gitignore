@@ -27,3 +27,4 @@ ui/playwright-report/
 Thumbs.db
 .vscode/
 .idea/
+ui/tsconfig.tsbuildinfo

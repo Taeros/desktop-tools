@@ -9,7 +9,7 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 _PATTERNS = [
-    re.compile(r"(?i)(token|key|secret|password|authorization|bearer)([\"'=:\s]+)([^\s\"'&,;]{6,})"),
+    re.compile(r"(?i)\b(token|api[_-]?key|key|secret|password|authorization|bearer)\b([\"'=:\s]+)([^\s\"'&,;]{6,})"),
     re.compile(r"\b[A-Za-z0-9_\-]{32,}\b"),  # long opaque strings (API keys, tokens)
 ]
 
