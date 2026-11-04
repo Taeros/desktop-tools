@@ -1,0 +1,14 @@
+{
+ "ip": "203.0.113.10",
+ "success": true,
+ "city": "Highland Falls",
+ "region": "New York",
+ "region_code": "NY",
+ "country": "United States",
+ "country_code": "US",
+ "latitude": 41.3692,
+ "longitude": -73.9662,
+ "timezone": {
+  "id": "America/New_York"
+ }
+}

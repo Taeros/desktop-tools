@@ -1,0 +1,17 @@
+{
+  "id": "clocks",
+  "name": "Clocks",
+  "version": "1.0.0",
+  "description": "Local time and the time at your saved places.",
+  "icon": "clock",
+  "category": "Information",
+  "page": true,
+  "cards": [
+    { "id": "world", "name": "World clock", "sizes": ["S", "M", "L"], "surfaces": ["control", "bar"] }
+  ],
+  "permissions": {
+    "network": [],
+    "system": [],
+    "secrets": []
+  }
+}

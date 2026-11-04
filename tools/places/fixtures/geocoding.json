@@ -1,0 +1,34 @@
+{
+ "results": [
+  {
+   "id": 1,
+   "name": "Smyrna",
+   "latitude": 38.41885,
+   "longitude": 27.12872,
+   "country_code": "TR",
+   "admin1": "Izmir",
+   "country": "Turkey",
+   "timezone": "Europe/Istanbul"
+  },
+  {
+   "id": 2,
+   "name": "Smyrna",
+   "latitude": 33.88399,
+   "longitude": -84.51438,
+   "country_code": "US",
+   "admin1": "Georgia",
+   "country": "United States",
+   "timezone": "America/New_York"
+  },
+  {
+   "id": 3,
+   "name": "Smyrna",
+   "latitude": 35.98284,
+   "longitude": -86.5186,
+   "country_code": "US",
+   "admin1": "Tennessee",
+   "country": "United States",
+   "timezone": "America/Chicago"
+  }
+ ]
+}

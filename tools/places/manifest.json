@@ -1,0 +1,15 @@
+{
+  "id": "places",
+  "name": "Places",
+  "version": "1.0.0",
+  "description": "Finds places by name and approximate current location for the shared Saved places list.",
+  "icon": "map-pin",
+  "category": "System",
+  "page": false,
+  "cards": [],
+  "permissions": {
+    "network": ["geocoding-api.open-meteo.com", "ipwho.is"],
+    "system": [],
+    "secrets": []
+  }
+}
