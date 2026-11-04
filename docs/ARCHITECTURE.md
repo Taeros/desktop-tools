@@ -181,6 +181,6 @@ Cards get loading / stale / error / empty states for free from the card host; th
 | What | Where |
 |------|-------|
 | Source of truth | GitHub private repo `desktop-tools` |
-| App on the PC | `%LOCALAPPDATA%\DesktopTools\app` (code + `.venv` created by `uv sync`) |
+| App on the PC | `%USERPROFILE%\DesktopTools` (code + `.venv` created by `uv sync`; uv and Python under `%LOCALAPPDATA%\DesktopTools`) |
 | User data | `%LOCALAPPDATA%\DesktopTools\data` |
 | Install / update | `scripts/install.ps1`: installs `uv` per-user if missing, `uv sync`, creates Startup shortcut. Re-run to update. |

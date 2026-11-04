@@ -13,7 +13,7 @@ uv run dt --fake --no-window      # any OS, sample data, prints a browser URL
 uv run dt                          # Windows: window, tray icon, Ctrl+Alt+Space
 ```
 
-Install on Windows (per-user, no admin): `powershell -ExecutionPolicy Bypass -File scripts\install.ps1`
+Install on Windows (per-user, no admin): double-click `Install.cmd` (runs `scripts\install.ps1`)
 
 ## Docs
 
